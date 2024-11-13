@@ -1,0 +1,401 @@
+﻿correo de prueba:
+Usuario: pruebajaimeisaza2024@gmail.com
+Clave: M@dellin2024
+
+menu:
+https://es.stackoverflow.com/questions/623385/submenu-de-no-se-despliega-en-blazor-net-8
+
+curso de blazor.
+https://www.dotnetrealworldexample.com/
+https://github.com/kartik786-git?tab=repositories
+https://www.youtube.com/watch?v=bSSzSV5GUhs
+
+ejemplo captcha
+https://github.com/tossnet/Blazor-Captcha
+
+ejemplo de arquitectura
+https://www.netmentor.es/entrada/clean-architecture
+
+control de errores.
+https://github.com/cyrilgupta/blazor-errorhandling
+https://albertcapdevila.net/control-excepciones-csharp/
+
+ULTIMO EJEMPLO EXPORTAR A EXCEL
+https://www.youtube.com/watch?v=eOhXQkknRcI
+
+
+EJEMPLOS DE GENERAR ARCHIVS EXCEL Y PDF
+https://www.youtube.com/watch?v=1eCgSsnIsYo
+
+este es el ejemplo del login
+https://www.youtube.com/watch?v=CRR6HPUPgsY
+
+ejemplo de reporte en excel
+https://www.syncfusion.com/blogs/post/export-data-to-excel-in-blazor
+
+ejemplo exportar a excel
+https://www.youtube.com/watch?v=eOhXQkknRcI
+https://github.com/CodigoEstudiante/099_ProyectoBlazorExcel
+
+curso de blazor:
+https://www.netmentor.es/entrada/clean-architecture
+https://www.victorgomezdejuan.com/2021/02/18/clean-architecture-con-blazor/
+https://dotnet.microsoft.com/es-es/learn/dotnet/architecture-guides
+https://learn.microsoft.com/es-es/dotnet/architecture/blazor-for-web-forms-developers/introduction?source=docs
+https://dotnet.microsoft.com/es-es/apps/aspnet/web-apps/blazor
+https://dotnet.microsoft.com/es-es/learn/aspnet/blazor-tutorial/next
+https://learn.microsoft.com/es-es/training/browse/?terms=blazor
+https://learn.microsoft.com/es-es/training/modules/interact-with-data-blazor-web-apps/10-summary#completion
+
+
+TABLAS.
+
+CREATE TABLE "EVMNET"."TABLE_ASESOR" 
+   (	"STRCODIGOASESOR" VARCHAR2(20 BYTE), 
+	"STRNOMBREASESOR" VARCHAR2(200 BYTE), 
+	"STRCEDULA" VARCHAR2(20 BYTE), 
+	"STREMAIL" VARCHAR2(200 BYTE), 
+	"STRESTADO" VARCHAR2(1 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE LA TABLA:
+  1	TAQUILLA 15	5	david.mejia.tabares@emvarias.com.co	1
+  --------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_ASESOR_HORARIO" 
+   (	"STRCODIGOASESOR" VARCHAR2(20 BYTE), 
+	"STRCODIGOHORARIO" VARCHAR2(20 BYTE), 
+	"STRFECHARESERVA" VARCHAR2(20 BYTE), 
+	"STRCEDULACLIENTE" VARCHAR2(20 BYTE), 
+	"STRCODIGOLUGARATENCION" VARCHAR2(20 BYTE), 
+	"STRHORARESERVA" VARCHAR2(20 BYTE), 
+	"STRFECHAATENCION" VARCHAR2(20 BYTE), 
+	"DTRHORSATECION" VARCHAR2(20 BYTE), 
+	"STRESTADOATENCION" VARCHAR2(1 BYTE), 
+	"STRCODIGORESERVA" VARCHAR2(100 BYTE), 
+	"STROBSERVACION" VARCHAR2(200 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE TABLA:
+  1	3	2024/06/25	1152213629	1	10:22:24 a. m.	2023/12/11	10:35:46 a. m.	1	2023121112224	Anulado por el usuario cliente
+1	4	2024/06/24	43163359	1	8:13:16 a. m.			1	202462183:6 	
+1	16	2023/12/05	71765423	1	2:36:52 p. m.	2023/12/11	10:30:49 a. m.	4	202312126:2 	Asesor cancelo la cita del cliente 5
+1	3	2023/12/06	1152213629	1	2:52:19 p. m.	2023/12/11	10:32:02 a. m.	3	202312522:9 	Atendido por asesor de experiencia 5
+1	4	2024/02/01	1152213629	1	5:06:40 p. m.			1	202413156:0 	
+1	4	2023/12/06	1152213629	1	2:56:40 p. m.			1	202312526:0 	
+1	3	2024/04/17	70250260	1	7:14:05 a. m.			1	202441674:5 	
+1	4	2024/04/17	71765423	1	7:17:39 a. m.	2024/04/16	7:19:39 a. m.	2	202441677:9 	Anulado por el usuario cliente
+1	6	2024/02/01	98588987	1	11:10:44 AM			1	20242111044	
+1	3	2024/02/01	98588987	1	11:24:45 AM			1	20242112445	
+1	5	2024/02/01	71765423	1	11:31:51 a. m.			1	20242113151	
+1	3	2024/06/19	71765423	1	1:46:15 p. m.			1	202461916:5 	
+  -----------------------------------------------------------------------------
+
+  CREATE TABLE "EVMNET"."TABLE_ASESOR_LUGAR" 
+   (	"STRCODIGOLUGAR" VARCHAR2(20 BYTE), 
+	"STRCODIGOASESOR" VARCHAR2(20 BYTE), 
+	"STRCODIGOASERLUGAR" VARCHAR2(20 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE LA TABLA:
+  1	1	1
+  ------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_ASESOR_TAQUILLA" 
+   (	"CODIGO" NUMBER NOT NULL ENABLE, 
+	"COD_ASESOR" VARCHAR2(20 BYTE), 
+	"COD_TAQUILLA" NUMBER, 
+	 CONSTRAINT "TABLE_ASESOR_TAQUILLA_PK" PRIMARY KEY ("CODIGO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  --------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_CLIENTES_TURNOS" 
+   (	"STRCEDULA" VARCHAR2(20 BYTE), 
+	"STRCODIGOTIPOPERSONA" VARCHAR2(20 BYTE), 
+	"STRCODIGOTIPODOCUMENTO" VARCHAR2(20 BYTE), 
+	"STRNOMBRES" VARCHAR2(200 BYTE), 
+	"STRAPELLIDOS" VARCHAR2(200 BYTE), 
+	"STRTELEFONOFIJO" VARCHAR2(20 BYTE), 
+	"STRTELEFONOCELULAR" VARCHAR2(20 BYTE), 
+	"STREMAIL" VARCHAR2(100 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+DATOS DE LA TABLA:
+43163359	1	1	marcela	tabares	300	31084158127	david.mejia.tabares@emvarias.com.co
+1152213629	1	1	daniel	salazar	311380	3113802636	danielfsalazar09@gmail.com
+71765423	1	1	david	mejia	300	300	david@gmail.com
+70250260	1	1	Cliente prueba	apellidos prueba	2502020	310202030	david.mejia.tabares@emvarias.com.co
+98588987	1	1	Juan	patino	0	3003068410	juan.patino@softwareone.com
+  -------------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_ESTADOS" 
+   (	"STRCODIGOESTADO" NUMBER NOT NULL ENABLE, 
+	"DESCESTADO" VARCHAR2(60 BYTE), 
+	 CONSTRAINT "TABLE_ESTADOS_PK" PRIMARY KEY ("STRCODIGOESTADO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EVMNET"."TABLE_ESTADOS_TRG" 
+BEFORE INSERT ON TABLE_ESTADOS 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.STRCODIGOESTADO IS NULL THEN
+      SELECT TABLE_ESTADOS_SEQ.NEXTVAL INTO :NEW.STRCODIGOESTADO FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EVMNET"."TABLE_ESTADOS_TRG" ENABLE;
+
+DATOS DE TABLA:
+1	No atendido
+2	Cancelado por cliente
+3	Atendido
+4	Cancelado por asesor
+
+
+-----------------------------------------------------------------------------------------------
+
+  CREATE TABLE "EVMNET"."TABLE_HORARIOS" 
+   (	"STRCODIGOHORARIO" VARCHAR2(20 BYTE), 
+	"STRHORARIO" VARCHAR2(15 BYTE), 
+	"ORDEN" NUMBER, 
+	"STRESTADO" VARCHAR2(1 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE TABLA:
+  1	7:00 a.m.	1	0
+2	7:30 a.m.	2	0
+3	8:00 a.m.	3	1
+4	8:30 a.m.	4	1
+5	9:00 a.m.	5	1
+6	9:30 a.m.	6	1
+7	10:00 a.m.	7	1
+8	10:30 a.m.	8	1
+9	11:00 a.m.	9	1
+10	11:30 a.m.	10	1
+11	12:00 p.m.	11	1
+12	12:30 p.m.	12	1
+13	13:00 p.m.	13	1
+14	13:30 p.m.	14	1
+15	14:00 p.m.	15	1
+16	14:30 p.m.	16	1
+17	15:00 p.m.	17	1
+18	15:30 p.m.	18	0
+19	16:00 p.m.	19	0
+20	16:30 p.m.	20	0
+21	17:00 p.m.	21	0
+  --------------------------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_LUGAR_ATENCION" 
+   (	"STRCODIGO" VARCHAR2(20 BYTE), 
+	"STRLUGARATENCION" VARCHAR2(100 BYTE), 
+	"STRESTADO" VARCHAR2(1 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE TABLA:
+  1	EPM EDIFICIO INTELIGENTE	1
+  ---------------------------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_TAQUILLA" 
+   (	"CODIGO" NUMBER NOT NULL ENABLE, 
+	"DESCRIPCION" VARCHAR2(30 BYTE), 
+	 CONSTRAINT "TABLE_TAQUILLA_PK" PRIMARY KEY ("CODIGO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "EVMNET"."TABLE_TAQUILLA_TRG" 
+BEFORE INSERT ON TABLE_TAQUILLA 
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.CODIGO IS NULL THEN
+      SELECT TABLE_TAQUILLA_SEQ.NEXTVAL INTO :NEW.CODIGO FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+ALTER TRIGGER "EVMNET"."TABLE_TAQUILLA_TRG" ENABLE;
+
+DATOS DE TABLA:
+
+-------------------------------------------------------------------------------
+
+ CREATE TABLE "EVMNET"."TABLE_TIPO_DOCUMENTO" 
+   (	"STRCODIGO" VARCHAR2(20 BYTE), 
+	"STRTIPODOCUMENTO" VARCHAR2(200 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE TABLA:
+  1	Cédula
+2	Pasaporte
+3	Cédula de extranjería
+4	Tarjeta de identidad
+  ------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_TIPO_PERSONA" 
+   (	"STRCODIGO" VARCHAR2(20 BYTE), 
+	"STRTIPOPERSONA" VARCHAR2(50 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE TABLA:
+  1	Natural
+2	Jurídica
+  ----------------------------------------------------------------------------------
+
+   CREATE TABLE "EVMNET"."TABLE_USERS" 
+   (	"USERNAME" VARCHAR2(4 BYTE), 
+	"PASSWORDHASH" VARCHAR2(4 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "EVMP_01_DEVMNET" ;
+
+  DATOS DE TABLA:
+  1234	1234
+  ***********************************************************************************************************
+
+  ejemplom pagina home con menu
+
+  @inherits LayoutComponentBase
+
+<div class="page">
+    <main>
+        <br />
+        <div class="text-center">
+            <img width="400" height="400" src="logo.png"
+                 class="img-responsive img-thumbnail" alt="https://www.emvarias.com.co/emvarias" style="padding:2rem">
+        </div>
+        <br />
+        <div class="container-fluid" style="background-color: #ee7402;">
+
+            <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #ee7402;">
+                <div class="container">
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" style="color: white" href="#" id="navbarDropdownProductos" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Reportes
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownProductos">
+                                    <a class="dropdown-item" style="color: darkorange" href="#">Servicios sin atender</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: white" href="/AtencionCliente">Atencion al Cliente</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                            <!-- Right-aligned menu items -->
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: white" href="#">Opción de Menú</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+
+        <div class="text-center">
+            <footer class="text-center py-3" style="color: black; margin-top: 17rem">
+                @{
+                    var año = @DateTime.Now.Year;
+                }
+                &copy; @año Todos los derechos reservados | Empresas Varias de Medellin
+            </footer>
+        </div>
+
+    </main>
+</div>

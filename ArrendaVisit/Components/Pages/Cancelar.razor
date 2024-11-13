@@ -1,0 +1,342 @@
+﻿@page "/Cancelar"
+@rendermode InteractiveServer
+
+@inject IgrabarClienteServicio grabarClienteServicio
+@inject IlistaServicio ListaServicio
+@inject NavigationManager NavigationManager
+
+@using BlazorCaptcha;
+@using Blazorise
+@using Entidades
+@using ArrendaVisit.Service
+@using Radzen
+@using Radzen.Blazor
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta o cancelación de citas</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222936;
+            color: #333; /* Color de texto principal */
+            box-sizing: border-box;
+            width: 100%;
+            overflow-x: hidden
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .card {
+            margin: auto;
+            background-color: #fff;
+            /* border: 1px solid #ccc; */
+            border-radius: 5px;
+            width: 90%; /* Ocupar todo el ancho disponible */
+            /* max-width: 100%; /* Asegurar que no se extienda más allá */ */ margin: auto;
+        }
+
+        .card-body {
+            padding: 20px;
+            width: 90%;
+            margin: auto;
+        }
+
+        .table-wrapper {
+            max-height: 265px;
+            overflow: auto;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover,
+            .btn-secondary:hover {
+                opacity: 0.8;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #222936;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 5px 0; /* Espacio interior del footer */
+            background-color: #222936; /* Fondo opcional */
+            color: white; /* Color del texto del footer */
+        }
+    </style>
+</head>
+<body>
+
+    @if (valided == false)
+    {
+        <br />
+        <div class="text-center">
+            <img width="400" height="400" src="~/AgenciaArriendo.png" class="img-responsive img-rounded img-thumbnail" alt="https://www.arrendavisit.com.co" style="border:none">
+        </div>
+        <br />
+
+        <div class="text-center">
+            <h5>Los campos señalados con asterisco <font color="red">(*)</font> son obligatorios</h5>
+        </div>
+
+        <div class="card">
+            <div class="card-body ">
+                <fieldset>
+                    <div class="float-none py-3">
+                        <font color="#dc8f35" size="5">
+                            <b>Cancelación de citas</b>
+                        </font>
+                    </div>
+
+                    <div class="">
+                        <div class="">
+                            <FieldLabel><font color="red">(*)</font>Número de documento</FieldLabel>
+                            <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STRCEDULA" Style="width: 100%" Placeholder="Digite numero de identificacion" MaxLength="30" class="form-control" type="number" required />
+                        </div>
+
+                        <div class="">
+                            <FieldLabel><font color="red">(*)</font>Correo electrónico</FieldLabel>
+                            <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STREMAIL" type="email" Placeholder="Digite Correo Electronico" MaxLength="200" class="form-control" required />
+                        </div>
+                    </div>
+
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-5 my-3">
+                            <RadzenButton Click="@(args => Consultar())" data-toggle="tooltip" title="Esta opcion te permite consultar las reservas activas!" class="btn btn-primary" Style="background:orange" Text="Consultar" ButtonStyle="ButtonStyle.Primary" />
+                            @* <RadzenButton Click="@(args => Cerrar())" data-toggle="tooltip" title="Esta opcion te permite retornar al menu principal!" class="btn btn-primary" Style="background:orange" Text="Retornar" ButtonStyle="ButtonStyle.Secondary" /> *@
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>HORAS</th>
+                                        <th align="center">APARTAMANTO VISTA</th>
+                                        <th>ASESOR</th>
+                                        <th align="center">FECHA CITA</th>
+                                        <th align="center">CANCELAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ModelsCancelacionesX != null && ModelsCancelacionesX.Count > 0)
+                                    {
+                                        @foreach (var datos in ModelsCancelacionesX)
+                                        {
+                                            <tr>
+                                                <td><font size="1">@datos.STRHORARIO</font></td>
+                                                <td><font size="1">@datos.STRAPARTAMENTOVISITA</font></td>
+                                                <td><font size="1">@datos.STRASESOR</font></td>
+                                                <td><font size="1">@datos.STRFECHARESERVA</font></td>
+                                                <td><font size="1"><RadzenButton Click="@(args => ValidarEliminar(datos.STRCODIGORESERVA))" data-toggle="tooltip" title="Esta opcion te permite Cancelar una Cita" class="btn btn-primary btn-sm" Style="background:orange" Text="Cancelar" ButtonStyle="ButtonStyle.Primary" /></font></td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="4">No hay datos disponibles</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+    }
+    <footer>
+        @{
+            var año = @DateTime.Now.Year;
+        }
+        &copy; @año Todos los derechos reservados | Empresas Varias de Medellin
+    </footer>
+</body>
+</html>
+
+
+<Modal @ref="modalconfirmacion">
+    <ModalContent Size="ModalSize.Large" Centered="true" Scrollable="true">
+        <ModalHeader>
+            <ModalTitle>
+                Portal de citas para visita de apartamentos presenciales.
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <br />
+            <p>
+                Señor Usuario:
+                <br /><br />
+                Usted no tiene Reservas a la fecha, si tiene alguna duda lo inivitamos a ponerse en contacto <br />
+                con nuestra linea de atencion al cliente (+604) 444 88 38.
+            </p>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CerrarModal">Cerrar</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="modalconfirmacioneliminar">
+    <ModalContent Size="ModalSize.Large" Centered="true" Scrollable="true">
+        <ModalHeader>
+            <ModalTitle>
+                Portal de citas para visita de apartamentos presenciales
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <br />
+            <p>
+                Señor Usuario:
+                <br /><br />
+                ¿Está seguro de cancelar su cita?
+            </p>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Clicked="@Eliminar">Aceptar Cancelacion</Button>
+            <Button Color="Color.Secondary" Clicked="@CerrarModal">Cerrar</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="modalcirculo">
+    <ModalContent Size="ModalSize.Small" Centered="true">
+        <button class="btn btn-primary text-nowrap" type="button">
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+            Enviando datos...
+        </button>
+    </ModalContent>
+</Modal>
+
+@code {
+
+    private bool valided = false;
+
+    private Modal? modalcirculo = null!;
+
+    string varSTRCODIGORESERVA = string.Empty;
+
+    private Modal? modalconfirmacion = null!;
+
+    private Modal? modalconfirmacioneliminar = null!;
+
+    private Models_Clientes_Turnos? Models_Clientes_Turno;
+
+    List<ModelsCancelaciones>? ModelsCancelacionesX;
+
+
+    public async Task Eliminar()
+    {
+        modalcirculo.Show();
+
+        try
+        {
+            await grabarClienteServicio.DeleteReserva(new Models_Parametros() { strcodigoasesor = varSTRCODIGORESERVA, stremail = Models_Clientes_Turno.STREMAIL });
+
+        }
+        catch (Exception e)
+        {
+            
+            throw;
+        }
+        
+        modalcirculo.Hide();
+
+        await Consultar();
+        modalconfirmacioneliminar.Hide();
+    }
+
+    public async Task ValidarEliminar(string STRCODIGORESERVA)
+    {
+        varSTRCODIGORESERVA = STRCODIGORESERVA;
+
+        modalconfirmacioneliminar.Show();
+    }
+
+    public async Task Consultar()
+    {
+        var yearsystem = DateTime.Today.Year;
+        var monthsystem = DateTime.Today.Month;
+        var daysystem = DateTime.Today.Day;
+
+        var fechasistema = yearsystem + "/" + monthsystem.ToString().PadLeft(2, '0') + "/" + daysystem.ToString().PadLeft(2, '0');
+
+        //var hora = DateTime.Now.ToString("h:mm:ss tt");
+
+        ModelsCancelacionesX = (await ListaServicio.GetAllConsultaHorariosReservados(new Models_Parametros() { strcodigoasesor = Models_Clientes_Turno.STRCEDULA, strfechareserva = fechasistema, stremail = Models_Clientes_Turno.STREMAIL })).ToList();
+
+        if (ModelsCancelacionesX == null || ModelsCancelacionesX.Count <= 0)
+        {
+            modalconfirmacion.Show();
+        }
+
+    }
+
+    private void Cerrar()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void CerrarModal()
+    {
+        modalconfirmacion.Hide();
+        modalconfirmacioneliminar.Hide();
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            await base.OnInitializedAsync();
+
+            Models_Clientes_Turno = new Models_Clientes_Turnos();
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+    }
+}

@@ -1,0 +1,584 @@
+﻿@page "/Solicitar"
+@rendermode InteractiveServer
+
+@inject IgrabarClienteServicio grabarClienteServicio
+@inject IlistaServicio ListaServicio
+@inject NavigationManager NavigationManager
+
+@using BlazorCaptcha;
+@using Blazorise
+@using Entidades
+@using ArrendaVisit.Service
+@using Radzen
+@using Radzen.Blazor
+@using System.Text.RegularExpressions
+
+@if (valided == false)
+{
+
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Citas para Visitar apartamentos ArrendaVisit</title>
+
+    <style>
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 5px 0; /* Espacio interior del footer */
+            background-color: #222936; /* Fondo opcional */
+            color: white; /* Color del texto del footer */
+        }
+    </style>
+ 
+</head>
+<body>
+
+        <br />
+        <div class="text-center">
+            <img width="400" height="400" src="AgenciaArriendo.png" class="img-responsive img-rounded img-thumbnail" alt="https://www.arrendavisit.com.co" style="border:none">
+        </div>
+        <br />
+
+    <div class="text-center">
+        <h5>Los campos señalados con asterico <font color="red">(*)</font> son obligatorios</h5>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+
+                <fieldset class="border p-2">
+                    <legend class="float-none w-auto p-2">
+                            <font color="#222936" ; size="2">
+                            <b>Ingrese los datos solicitados a continuación para agendar su cita </b>
+                      
+                        </font>
+                    </legend>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Tipo de Persona</FieldLabel>
+
+                                <select @bind="@Models_Clientes_Turno.STRCODIGOTIPOPERSONA" class="custom-select" title="Seleccion es requerida" required>
+                                    <option value="Select">Selecione un tipo de Persona</option>
+
+                                    @if (ModelsTipoPersonas != null && ModelsTipoPersonas.Count > 0)
+                                    {
+
+                                        @foreach (var dato in ModelsTipoPersonas)
+                                        {
+                                            <option value="@dato.STRCODIGO"> @dato.STRTIPOPERSONA</option>
+                                        }
+                                    }
+                                </select>
+
+                                @*<ValidationMessage For="@(() => Models_Clientes_Turno.STRCODIGOTIPOPERSONA)" />*@
+
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Tipo de Documento</FieldLabel>
+
+                                <select @bind="@Models_Clientes_Turno.STRCODIGOTIPODOCUMENTO" class="custom-select" title="Seleccion es requerida" required>
+                                    <option value="Select">Selecione un tipo de Documento</option>
+
+                                    @if (ModelsTipoDocumentos != null && ModelsTipoDocumentos.Count > 0)
+                                    {
+
+                                        @foreach (var dato in ModelsTipoDocumentos)
+                                        {
+                                            <option value="@dato.STRCODIGO"> @dato.STRTIPODOCUMENTO</option>
+                                        }
+                                    }
+
+                                </select>
+                                @*<ValidationMessage For="@(() => Models_Clientes_Turno.STRCODIGOTIPODOCUMENTO)" />*@
+
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Número de documento</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STRCEDULA" Style="width: 100%" Placeholder="Digite numero de identificacion" MaxLength="30" class="form-control" type="number" required />
+                                @*  <ValidationMessage For="@(() => Models_Clientes_Turno.STRCEDULA)" />*@
+                                @* <RadzenTextBox class="form-control" @bind-Value="@contact.FIRTSNAME">
+                            </RadzenTextBox>*@
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Nombres completos</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STRNOMBRES" Placeholder="Digite sus nombres" MaxLength="200" class="form-control" required />
+                                @*<ValidationMessage For="@(() => Models_Clientes_Turno.STRNOMBRES)" />*@
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Apellidos completos</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STRAPELLIDOS" Placeholder="Digite los apellidos" MaxLength="200" class="form-control" required />
+                                @*<ValidationMessage For="@(() => Models_Clientes_Turno.STRAPELLIDOS)" />*@
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel>Teléfono fijo</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STRTELEFONOFIJO" Placeholder="Digite Telefono Fijo" MaxLength="30" class="form-control" type="number" required />
+                                @* <ValidationMessage For="@(() => Models_Clientes_Turno.STRTELEFONOFIJO)" />*@
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Teléfono celular</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STRTELEFONOCELULAR" Placeholder="Digite Telefono Celular" MaxLength="30" class="form-control" type="number" required />
+                                @*<ValidationMessage For="@(() => Models_Clientes_Turno.STRTELEFONOCELULAR)" />*@
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Correo electrónico</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STREMAIL" type="email" Placeholder="Digite Correo Electronico" MaxLength="200" class="form-control" required />
+                                @* <ValidationMessage For="@(() => Models_Clientes_Turno.STREMAIL)" />*@
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <FieldLabel><font color="red">(*)</font>Confirme Correo electrónico</FieldLabel>
+                                <RadzenTextBox @bind-Value="@Models_Clientes_Turno.STREMAIL" type="email" Placeholder="Digite Correo Electronico" MaxLength="200" class="form-control" required />
+                            </div>
+
+                            <style>
+                                a {
+                                    color: orange; /* Cambia el color del texto del enlace a naranja */
+                                }
+
+                                #global {
+                                    height: 300px;
+                                    width: 200px;
+                                    border: 1px solid #ddd;
+                                    background: #f1f1f1;
+                                    overflow-y: scroll;
+                                }
+                            </style>
+
+                            <div class="col-md-12 mb-3 global">
+
+                                <p>
+                                    <h6>AUTORIZACIÓN PARA EL TRATAMIENTO DATOS PERSONALES</h6>
+                                </p>
+                                <p>
+                                    <br />
+                                    EMVARIAS informa que ha establecido una política para el manejo de datos personales, por lo tanto, ha implementado mecanismos seguros y confiables
+                                    para la protección de éstos, con el propósito de garantizar su confidencialidad e impedir el acceso indeseado de terceras personas. Dicha política puede
+                                    ser consultada <br />
+                                        en la página web <a target="_blank" href='http://www.arrendavisit.com.co'>http://www.www.arrendavisit.com.co</a>.<br />
+                                    Teniendo en cuenta lo anterior, mediante el diligenciamiento y registro de los datos relacionados, autorizo de manera libre, expresa, inequívoca, voluntaria e
+                                    informada a ArrendaVisit y/o quien actúe en su nombre, para la recolección, almacenamiento, uso, circulación y supresión de mis datos personales con la finalidad de
+                                    tramitar y atender la PQRs presentada. Además, he sido informado que tengo derecho a conocer, actualizar y rectificar los datos personales proporcionados, a solicitar prueba
+                                    de esta autorización, a solicitar información sobre el uso que se le ha dado a los mismos de forma gratuita, a presentar reclamos al responsable y quejas ante la
+                                    Superintendencia de Industria y Comercio, a revocar o solicitar la supresión de los datos suministrados en los casos que aplique, que los canales para realizar peticiones
+                                    o reclamos dispuestos por EMVARIAS en calidad de responsable son: correo electrónico <a target="_blank" href='protecciondatos@emvarias.com.co'>protecciondatos@emvarias.com.co</a>, línea telefónica 4448838, línea nacional 01 8000 418838, formulario PQR en página web.
+                                    Lo anterior en cumplimiento a lo establecido en la Ley 1581 de 2012 Ley de Protección de datos, reglamentado parcialmente por el Decreto 1377 de 2013 y demás normas que traten y regulen sobre esta materia.
+                                    <br />
+                                    <br />
+                                        <a target="_blank" href='https://www.arrendavisit.com.co/arrendavisit/Portals/0/archivos/Corporativo/POLITICA%20PARA%20EL%20TRATAMIENTO%20DE%20DATOS%20PERSONALES-2021.pdf?ver=lFWjOibmOfS4QfZ45UhAiA%3d%3d'>Política de tratamiento de datos personales</a>
+                                    <br />
+                                        <a target="_blank" href='https://www.arrendavisit.com.co/arrendavisit/Portals/0/archivos/Corporativo/Nuevo%20aviso%20de%20privacidad%20ArrendaVisit%20de%20%20medellin%20vr%2002.pdf?ver=AWcSKhVKUfNH7Amle1nZ5g%3d%3d'>Aviso de privacidad</a>
+                                </p>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <Captcha @bind-CaptchaWord="@Captcha" CharNumber="@CaptchaLetters" />
+                            </div>
+
+                            <div class="mb-3">
+                                <FieldLabel><font color="red">(*)</font>CAPTCHA</FieldLabel>
+                                <RadzenTextBox @bind-Value="@formModel.CaptchaVerif" id="idCaptcha" Style="width: 100%" Placeholder="Escribe las letras de arriba" MaxLength="10" class="form-control" required />
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <Check TValue="bool" Checked="@rememberMe" CheckedChanged="@ValidarCaptcha">
+                                    Acepto el tratamiento de datos personales.
+                                </Check>
+                            </div>
+
+                            @* <div class="col-md-12 mb-3">
+                        <Check TValue="bool" Checked="@rememberMe" CheckedChanged="@Activacion">
+                        Acepto el tratamiento de datos personales.
+                        </Check>
+                        </div> *@
+
+                     @*        <div class="row justify-content-center">
+                                <div class="col-md-5 mb-3">
+                                    <RadzenButton Click="@(args => DropDownChanged())" data-toggle="tooltip" title="Retorna a la pagina anterior" class="btn btn-primary" Style="background:orange" Text="Retornar" ButtonStyle="ButtonStyle.Primary" />
+                                </div>
+                            </div> *@
+
+                        </div>
+                    </div>
+
+                    @*
+                <div class="col-md-4">
+                </div>*@
+
+                    @*<RadzenTextBox class="form-control" @bind-Value="@contact.PHONE">
+                </RadzenTextBox>*@
+
+                    @*<RadzenDropDown TValue="string" Data=@(customers.Select(c => c.CompanyName).Distinct()) Change="@OnChange" />*@
+
+                </fieldset>
+                @* } *@
+
+            </div>
+        </div>
+    </div>
+
+     <footer>
+            @{
+                var año = @DateTime.Now.Year;
+            }
+            &copy; @año Todos los derechos reservados | ArrendaVisit
+        </footer>
+</body>
+</html>
+}
+
+<Modal @ref="modalalertacaptcha">
+    <ModalContent Size="ModalSize.Default" Centered="true">
+        <div style="background-color: #f8f9fa; border-radius: 10px;">
+            <ModalHeader style="background-color: #dc8f35; color: white;font-size:small">
+                <ModalTitle>
+                    Validación Captcha
+                </ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+                <br>
+                Los Datos del Captcha no son los mismos intenta de nuevo.
+            </ModalBody>
+            <ModalFooter style="background-color: #f8f9fa;">
+                <Button Color="Color.Primary" Clicked="@CerrarModal" Style="background-color: #dc8f35;">Cerrar</Button>
+            </ModalFooter>
+        </div>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="modalvalidar">
+    <ModalContent Size="ModalSize.Default" Centered="true">
+        <div style="background-color: #f8f9fa; border-radius: 10px;">
+            <ModalHeader style="background-color: #dc8f35; color: white;font-size:small">
+                <ModalTitle>
+                    Validación Campos
+                </ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+                <br>
+                Los campos con asteriscos son obligatorios.
+            </ModalBody>
+            <ModalFooter style="background-color: #f8f9fa;">
+                <Button Color="Color.Primary" Clicked="@CerrarModal" Style="background-color: #dc8f35;">Cerrar</Button>
+            </ModalFooter>
+        </div>
+    </ModalContent>
+</Modal>
+
+@*<Modal @ref="modalRef">
+    <ModalContent Size="ModalSize.Large" Centered="true" Scrollable="true">
+        <ModalHeader>
+            <ModalTitle>
+                HABEAS DATA
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <br />
+            <p>
+                ArrendaVisit S.A.S identificado con NIT  890.988.955-9 Ubicada en la Calle 10 #45-198 Medellín, Antioquia, Colombia.
+
+                El cual tiene dispuestos los siguientes canales de comunicación:
+
+                - Línea de atención al cliente en Medellin:  (+604) 444 88 88
+                - Correo electrónico: contacto@arrenavist.com.co
+                - Oficina: Calle 10 #45-198 Medellín, Antioquia, Colombia
+
+                En el horario de lunes a viernes (excepto días festivos)  a partir de las 7:00 am hasta las 5:00 pm.
+                Tiene bajo su administración y tratamiento datos personales  privados por relaciones comerciales y administrativas.
+                El cual consiste en recolectar, almacenar, depurar, usar, analizar, actualizar y cruzar la información proporcionada por los titulares y facilitar
+                la información a nuestro proveedor para el servicio exclusivo de custodia de la información.
+
+                La información suministrada por usted también podrá ser utilizada para que se le envíe como cliente, proveedor o contratista invitaciones a eventos, información de lanzamiento de productos
+                y demás actualizaciones comerciales, como también temas contables y financieros.
+                De acuerdo a lo establecido en el Art 8 de la Ley 1581  de 2012 se le informan sus derechos como titular:
+
+                - Conocer, actualizar y rectificar los datos personales suministrados.
+                - Solicitar prueba de esta autorización.
+                - Solicitar información del uso que le ha dado a los datos personales.
+                - Presentar quejas ante la Superintendencia de Industria y Comercio por el uso inadecuado de los datos personales.
+                - Revocar la autorización y/o solicitar la supresión del dato cuando en el Tratamiento no se respeten los principios, derechos y garantías constitucionales y legales.
+                - Acceder en forma gratuita a los datos personales que se hayan suministrado para tratamiento.
+
+                Al proporcionar sus datos personales por escrito, a través de una solicitud, formato en papel, formato digital, correo electrónico, o cualquier otro documento, acepta y autoriza  a EMPRESAS VARIAS DE MEDELLIN S.A.S
+                a realizar la administración y tratamiento de forma automatizada de los mismos.
+                Para acceder a  la política de tratamiento de datos  personales y demás procedimientos puede ingresar a  la página  web https://www.arrendavisit.com.co.
+
+            </p>
+        </ModalBody>
+        <ModalFooter>
+            @*<button type="submit" class="btn btn-success">Submit</button>*@
+@*<Button Color="Color.Primary" Clicked="@Aceptar">Aceptar Habeas Data</Button>
+            <Button Color="Color.Secondary" Clicked="@NoAceptar">No Aceptar Habeas Data</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>*@
+
+@* <Modal @ref="modalvalidar">
+    <ModalContent Size="ModalSize.Large" Centered="true" Scrollable="true">
+        <ModalHeader>
+            <ModalTitle>
+                Validacion Campos
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <br />
+            <p>
+                Los campos señalados con asterico <font color="red">(*)</font> son obligatorios y el campo email debe ser valido.
+            </p>
+        </ModalBody>
+        <ModalFooter>
+            <button type="submit" class="btn btn-success">Submit</button>
+            <Button Color="Color.Secondary" Clicked="@NoAceptar">Cerrar Ventana</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal> *@
+
+@*</EditForm>*@
+
+
+
+@code {
+    private int CaptchaInvalido = 0;
+    private string Captcha = "";
+    private int CaptchaLetters = 5;
+    private bool valided = false;
+    private FormModel? formModel = new FormModel();
+    private Modal? modalalertacaptcha = null!;
+
+    private Models_Clientes_Turnos? Models_Clientes_Turno;
+
+    List<ModelsTipoPersona>? ModelsTipoPersonas;
+    List<ModelsTipoDocumento>? ModelsTipoDocumentos;
+
+    //private List<ModelsTipoPersona> Employees { get; set; }
+
+    bool rememberMe;
+    bool Bandera = false;
+
+    //private Modal? modalRef = null!;
+    private Modal? modalvalidar = null!;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Captcha = BlazorCaptcha.Tools.GetCaptchaWord(CaptchaLetters);
+
+        if (CaptchaInvalido!=1)
+        {
+            try
+            {
+                await base.OnInitializedAsync();
+
+                Models_Clientes_Turno = new Models_Clientes_Turnos();
+
+                ModelsTipoPersonas = (await ListaServicio.GetAllTipoPersona()).ToList();
+                ModelsTipoDocumentos = (await ListaServicio.GetAllTipoDocumento()).ToList();
+
+                //ModelsTipoPersonas = await ListaServicio.GetAllTipoPersona();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }     
+
+    }
+
+    private void ValidarCaptcha()
+    {
+        if (formModel.CaptchaVerif == Captcha)
+        {
+            CaptchaInvalido = 0;
+            rememberMe = true;
+            valided = true;
+            formModel = new FormModel();
+            Activacion(rememberMe);
+        }
+        else
+        {
+            CaptchaInvalido = 1;
+            NoAceptar();
+            LimpiarCampos();
+            modalalertacaptcha.Show();
+
+        }
+
+    }
+
+    public class FormModel
+    {
+        public string Name { get; set; } = "";
+
+        public string CaptchaVerif { get; set; } = "";
+    }
+
+    private void CerrarModal()
+    {
+        modalvalidar.Hide();
+        modalalertacaptcha.Hide();
+        OnInitializedAsync();
+
+    }
+
+    private void LimpiarCampos()
+    {
+        rememberMe = false;
+        // OnInitializedAsync();
+        valided = false;
+        formModel.CaptchaVerif = string.Empty;
+    }
+
+    private void Activacion(bool value)
+    {
+        String sFormato;
+        sFormato = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+
+        rememberMe = value;
+
+        if (value == true)
+        {
+            Bandera = false;
+
+            if (Models_Clientes_Turno.STRCEDULA == string.Empty || Models_Clientes_Turno.STRCEDULA == null)
+            {
+
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STRNOMBRES == string.Empty || Models_Clientes_Turno.STRNOMBRES == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STRAPELLIDOS == string.Empty || Models_Clientes_Turno.STRAPELLIDOS == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STREMAIL == string.Empty || Models_Clientes_Turno.STREMAIL == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STREMAIL2 == string.Empty || Models_Clientes_Turno.STREMAIL2 == null || Models_Clientes_Turno.STREMAIL2 != Models_Clientes_Turno.STREMAIL)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STRTELEFONOCELULAR == string.Empty || Models_Clientes_Turno.STRTELEFONOCELULAR == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STRTELEFONOFIJO == string.Empty || Models_Clientes_Turno.STRTELEFONOFIJO == null)
+            {
+                Models_Clientes_Turno.STRTELEFONOFIJO = "0";
+                //Bandera = true;
+                //modalvalidar.Show();
+            }
+
+            if (Models_Clientes_Turno.STRCODIGOTIPOPERSONA == string.Empty || Models_Clientes_Turno.STRTELEFONOFIJO == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+            else
+            {
+                if (Convert.ToUInt64(Models_Clientes_Turno.STRCODIGOTIPOPERSONA) <= 0)
+                {
+                    Bandera = true;
+                    // modalvalidar.Show();
+                }
+            }
+
+            if (Models_Clientes_Turno.STRCODIGOTIPODOCUMENTO == string.Empty || Models_Clientes_Turno.STRCODIGOTIPODOCUMENTO == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+            else
+            {
+                if (Convert.ToUInt64(Models_Clientes_Turno.STRCODIGOTIPODOCUMENTO) <= 0)
+                {
+                    Bandera = true;
+                    // modalvalidar.Show();
+                }
+            }
+
+            if (Models_Clientes_Turno.STREMAIL == null)
+            {
+                Bandera = true;
+                // modalvalidar.Show();
+            }
+            else
+            {
+                if (Regex.IsMatch(Models_Clientes_Turno.STREMAIL, sFormato) == false)
+                {
+                    Bandera = true;
+                    // modalvalidar.Show();
+                }
+
+            }
+
+
+            if (Bandera == false)
+            {
+                //modalRef.Show();
+                Aceptar();
+            }
+            else
+            {
+                modalvalidar.Show();
+                valided = false;
+            }
+
+        }
+    }
+
+    protected async Task Aceptar()
+    {
+
+        await grabarClienteServicio.InsertClientes(Models_Clientes_Turno);
+
+        NavigationManager.NavigateTo($"/Calendario/{Models_Clientes_Turno.STRCEDULA}/{Models_Clientes_Turno.STREMAIL}");
+    }
+
+
+    private void DropDownChanged()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+
+    private void NoAceptar()
+    {
+
+        Bandera = false;
+        modalvalidar.Hide();
+
+        rememberMe = false;
+        //modalRef.Hide();
+    }
+
+
+}

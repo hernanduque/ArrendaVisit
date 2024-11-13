@@ -1,0 +1,520 @@
+﻿@page "/Calendario/{strcedulacliente}/{stremailcliente}"
+@rendermode InteractiveServer
+
+@using Blazorise
+@using Entidades
+
+@using ArrendaVisit.Service
+@using Radzen
+@using Radzen.Blazor
+@using System.Text.RegularExpressions
+
+@inject NavigationManager NavigationManager
+@inject IlistaServicio ListaServicio
+@inject IgrabarClienteServicio grabarClienteServicio
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Citas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Ajusta la fuente según tus preferencias */
+            background-color: #222936; /* Color de fondo */
+            color: #333; /* Color de texto principal */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: max-content;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff; /* Fondo del contenido */
+            border: 1px solid #ddd; /* Borde alrededor del contenido */
+            border-radius: 5px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .table-wrapper {
+            max-height: 265px;
+            overflow: auto;
+        }
+
+        .btn-primary {
+            background-color: orange; /* Color de fondo del botón primario */
+            color: white; /* Color de texto del botón primario */
+        }
+
+        .btn-secondary {
+            background-color: orange; /* Color de fondo del botón secundario */
+            color: white; /* Color de texto del botón secundario */
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 5px 0; /* Espacio interior del footer */
+            background-color: #222936; /* Fondo opcional */
+            color: white; /* Color del texto del footer */
+        }
+    </style>
+
+</head>
+<body>
+
+    <br />
+    <div class="text-center">
+        <img width="300" height="300" src="AgenciaArriendo.png" class="img-responsive img-rounded img-thumbnail" alt="https://www.arrendavisit.com.co" style="border:none">
+    </div>
+    <br />
+
+    <div class="card">
+        <div class="card-body">
+            @*  <div class="container"> *@
+            <fieldset>
+                @* <legend class="float-none w-auto p-2"> *@
+                @*  <font color="#dc8f35" size="2">
+                <b>CITAS DISPONIBLES</b>
+                </font> *@
+
+                <div class="float-none py-3">
+                    <font color="#222936" ; size="5">
+                        <b>CITAS DISPONIBLES</b>
+                    </font>
+                </div>
+                @*     </legend> *@
+
+                @*  <div class="row"> *@
+                <div class="">
+                    <div class="col-md-12 my-3">
+                        <label><font color="red">(*)</font> Apartamento visita</label>
+                        <select value="@Models_Clientes_Citas.STRCODIGOAPARTAMENTOVISITA" onchange="@listaAsesor" class="custom-select" title="Seleccion es requerida" required>
+                            <option value="Select">Seleccione un apartamento a visitar</option>
+                            @if (ModelsApartamentoVisitaX != null && ModelsapartamantoVisitax.Count > 0)
+                            {
+                                @foreach (var dato in ModelsApartamantoVisitaX)
+                                {
+                                    <option value="@dato.STRCODIGO">@dato.STRAPARTAMENTOVISITA</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 my-3">
+                        <label><font color="red">(*)</font> Asesor de visita</label>
+                        <select value="@Models_Clientes_Cita.STRCODIGOASESORASIGNADO" onchange="@EventCodigoAsesor" class="custom-select" title="Seleccion es requerida" required>
+                            <option value="Select">Seleccione un asesor de atención</option>
+                            @if (MODELS_ASESOR_APARTAMENTOS != null && MODELS_ASESOR_APARTAMENTOS.Count > 0)
+                            {
+                                @foreach (var dato in MODELS_ASESOR_APARTAMENTO)
+                                {
+                                    <option value="@dato.STRCODIGOASESOR">@dato.STRNOMBREASESOR</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 my-3">
+                        <label><font color="red">(*)</font> Seleccione fecha de la cita</label>
+                        <DatePicker onchange="@ValidarFecha" TValue="DateTime?" placeholder="YYYY/MM/DD" required />
+                        <span>Formato: YYYY/MM/DD</span>
+                    </div>
+                </div>
+
+
+                <div class="row justify-content-center">
+                    <div class="col-md-5 my-3">
+                        <RadzenButton Click="@(args => listaServicio())" data-toggle="tooltip" title="Esta opción te permite solicitar una cita para poner PQRS!" class="btn btn-primary" style="background: orange;" Text="Consultar Disponibilidad" />
+                        @* <RadzenButton Click="@(args => NavigateCancelar())" data-toggle="tooltip" title="Esta opción te permite regresar sin guardar" class="btn btn-secondary" style="background: orange;" Text="Retornar" /> *@
+                    </div>
+                </div>
+
+                <br />
+
+               @*  <div class="col-md-6 mb-3"> *@
+                <div class="mb-3">
+                    <div class="table-wrapper">
+                        <table class="table table-wrapper">
+                            <thead>
+                                <tr>
+                                    <th><font size="1">HORA</font></th>
+                                    <th align="center"><font size="1">Apartamento Visita</font></th>
+                                    <th><font size="1">ASESOR</font></th>
+                                    @if (!string.IsNullOrEmpty(fecha))
+                                    {
+                                        <th align="center"><font size="1">FECHA CITA<br />@fecha</font></th>
+                                    }
+                                    else
+                                    {
+                                        <th align="center"><font size="1">FECHA CITA</font></th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Models_OcupacionX != null && Models_OcupacionX.Count > 0)
+                                {
+                                    @foreach (var datos in Models_OcupacionX)
+                                    {
+                                        <tr>
+                                            <td><font size="1">@datos.strhorario</font></td>
+                                            <td><font size="1">@StrApartamentoVisita</font></td>
+                                            <td><font size="1">@nombreasesor</font></td>
+                                            <td><RadzenButton Click="@(args => Grabar(datos.strcodigohorario))" data-toggle="tooltip" title="Esta opción te permite Asignar Cita" class="btn btn-primary btn-sm" style="background: orange;" Text="Asignar" /></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4">No hay datos disponibles</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @*       </div> *@
+
+            </fieldset>
+        </div>
+    </div>
+    @*</div> *@
+    <footer>
+        @{
+            var año = @DateTime.Now.Year;
+        }
+        &copy; @año Todos los derechos reservados | Agencia Arriendo Medellin y cercanias
+    </footer>
+</body>
+</html>
+
+<Modal @ref="modalvalidar">
+    <ModalContent Size="ModalSize.Large" Centered="true" Scrollable="true">
+        <ModalHeader>
+            <ModalTitle>
+                Validacion Fechas
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <br />
+            <p>
+                Señor Usuario tenga presenta las siguientes observaciones  <br /><br />
+
+                *La fecha no puede ser menor a la fecha actual. <br />
+                *Los dias Sabados, Domingos y feriados no se presta servicio.
+            </p>
+        </ModalBody>
+        <ModalFooter>
+            @*<button type="submit" class="btn btn-success">Submit</button>*@
+            <Button Color="Color.Secondary" Clicked="@NoAceptar">Cerrar Ventana</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="modalconfirmacion">
+    <ModalContent Size="ModalSize.Large" Centered="true" Scrollable="true">
+        <ModalHeader>
+            <ModalTitle>
+                Confirmación de su cita.
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <br />
+            <p>
+                Señor usuario, recuerde:<br /><br />
+                1. Presentarse a la hora programada, y si es posible una lista de preguntas como:<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;•Cercania de colegios.<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;•Cercania de servicios de salud, transporte y recreacion.<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;•En caso de ir acompañado procure sea alguien acertivo y de confianza.<br />
+                2. Al momento de llegar al apartamento por favor anunciarse con el portero indicando que tiene una cita programada<br />
+                3. Su cita no puede transferirse a otro cliente<br />
+                4. No presentarse o llegada tarde implicará pedir una nueva cita o un turno en la oficina<br /><br />
+
+                &nbsp;&nbsp;&nbsp;&nbsp;*Fecha de la cita:          @fecha <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;*Hora de la cita:           @strhorareserva <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;*Apartamanto Visita:          @StrApartamentoVisita <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;*Creador de experiencia:    @nombreasesor <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;*Código de la cita:         @STRCODIGORESERVA <br /><br />
+
+                A su correo le llegará esta misma confirmación de su cita.<br /><br />
+                Gracias por usar nuestro sistema de agendamiento en línea. <br /><br />
+
+            </p>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CerrarConfirmacion">Aceptar</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="modalcirculo">
+    <ModalContent Size="ModalSize.Small" Centered="true">
+        <button class="btn btn-primary text-nowrap" type="button">
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+            Enviando datos...
+        </button>
+        @*<div class="spinner-border text-danger">
+        <div>Procesando!!</div>
+        </div>*@
+    </ModalContent>
+    @*<ModalContent Size="ModalSize.Small" Centered="true">
+    <ModalHeader>
+    <ModalTitle>
+    Validacion Fechas
+    </ModalTitle>
+    </ModalHeader>
+    <ModalBody>
+    <div class="spinner-border text-danger">
+    <div>Procesando Informacion!!</div>
+    </div>
+    </ModalBody>
+    <ModalFooter>
+    <button type="submit" class="btn btn-success">Submit</button>
+    <Button Color="Color.Secondary" Clicked="@NoAceptar">Cerrar Ventana</Button>
+    </ModalFooter>
+    </ModalContent>*@
+</Modal>
+
+<Modal @ref="modalerror">
+    <ModalContent Size="ModalSize.Small" Centered="true">
+        <button class="btn btn-primary text-nowrap" type="button">
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+            @error
+        </button>
+
+    </ModalContent>
+
+</Modal>
+
+@*  </LayoutContent>*@
+
+@* <LayoutFooter>
+    Footer
+    </LayoutFooter>*@
+@*</Layout>*@
+
+@code {
+    string error;
+
+    [Parameter]
+    public string strcedulacliente { get; set; }
+
+    [Parameter]
+    public string stremailcliente { get; set; }
+
+    string STRCODIGORESERVA = string.Empty;
+
+    string nombreasesor = string.Empty;
+
+    string strcodigoapartamantovisita = string.Empty;
+
+    string codigoasesor = string.Empty;
+
+    string fecha = string.Empty;
+
+    string StrSede = string.Empty;
+
+    string strhorareserva = string.Empty;
+
+    private Modal? modalerror = null!;
+
+    private Modal? modalvalidar = null!;
+
+    private Modal? modalconfirmacion = null!;
+
+    private Modal? modalcirculo = null!;
+
+    private Models_Clientes_Citas? ClienteCitas;
+
+    private Models_Clientes_Citas? Models_Clientes_Cita;
+
+    List<Modelsapartamentovisita>? ModelsapartamantoVisitaX;
+
+    List<MODELS_ASESOR_APARTAMENTO>? MODELS_ASESOR_APARTAMANTOS;
+
+    List<Models_Ocupacion>? Models_OcupacionX;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            await base.OnInitializedAsync();
+
+            Models_Clientes_Cita = new Models_Clientes_Citas();
+
+            ModelsApartamentoVisitaX = (await ListaServicio.GetAllapartamentovisita()).ToList();
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+
+    protected async Task Grabar(string strcodigohorario)
+    {
+        var resultado = Models_OcupacionX.Where(x => x.strcodigohorario == strcodigohorario).ToList();
+
+        ClientesCitas = new ClientesCitas();
+
+        if (resultado != null && resultado.Count > 0)
+        {
+            foreach (var datos in resultado)
+            {
+                strhorareserva = datos.strhorario;
+
+                ClientesCitas.STRCEDULA = strcedulacliente;
+                ClientesCitas.STRCODIGOAPARTAMENTOVISITA = strcodigoapartamantovisita;
+                ClientesCitas.STRCODIGOASESORASIGNADO = codigoasesor;
+                ClientesCitas.STRFECHARESERVA = fecha;
+                ClientesCitas.STRHORARESERVA = datos.strcodigohorario;
+                ClientesCitas.STRFECHAREALVISITA = string.Empty;
+                ClientesCitas.STRHORAREALVISITA = string.Empty;
+                ClientesCitas.STRESTADOVISITA = "1"; //este estado es el inicial sin VISITA
+
+                var yearsystem = DateTime.Today.Year;
+                var monthsystem = DateTime.Today.Month;
+                var daysystem = DateTime.Today.Day;
+                var hora = DateTime.Now.ToString("h:mm:ss tt");
+                STRCODIGORESERVA = yearsystem.ToString() + monthsystem.ToString() + daysystem.ToString() + hora.Substring(0, 1) + hora.Substring(3, 2) + hora.Substring(6, 2);
+                ClienteCitas.STRCODIGORESERVA = STRCODIGORESERVA;
+
+                ClientesCitas.fecha = @fecha;
+                ClientesCitas.strhorareservax = strhorareserva;
+                ClientesCitas.Strapartamentovisita = StrApartamentoVisita;
+                ClientesCitas.nombreasesor = nombreasesor;
+                ClientesCitas.stremailcliente = stremailcliente;
+
+            }
+        }
+
+        modalcirculo.Show();
+
+        try
+        {
+            //se debe volver habilitar
+            await grabarClienteServicio.GrabarCita(ClientesCitas);
+
+            modalcirculo.Hide();
+            modalconfirmacion.Show();
+        }
+        catch (Exception e)
+        {
+            error = e.Message.ToString();
+
+            //modalerror.Show();
+
+        }
+
+    }
+
+    private void Delete()
+    {
+        NavigationManager.NavigateTo("/Cancelar");
+    }
+
+    private void NavigateCancelar()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    public async Task EventCodigoAsesor(ChangeEventArgs? e)
+    {
+        codigoasesor = e.Value.ToString();
+    }
+
+    public async Task listaAsesor(ChangeEventArgs? e)
+    {
+
+        var resultado =ClientesCitas.Where(x => x.STRCODIGO == e.Value.ToString()).ToList();
+
+        @foreach (var LISTA in resultado)
+        {
+            StrSede = LISTA.STRAPARTAMENTOVISITA;
+        }
+
+        strcodigosede = e.Value.ToString();
+
+        MODELS_ASESOR_APARTAMENTOS = new List<MODELS_ASESOR_APARTAMENTO>();
+
+        MODELS_ASESOR_APARTAMENTOS = (await ListaServicio.GetAllLAsesorApartamento(e.Value.ToString())).ToList();
+    }
+
+    public async Task listaServicio()
+    {
+        try
+        {
+            Models_OcupacionX = (await ListaServicio.GetAllLOCUPACION(new Models_Parametros() { strcodigoasesor = codigoasesor, strfechareserva = fecha })).ToList();
+
+            if (Models_OcupacionX != null && Models_OcupacionX.Count > 0)
+            {
+                var resultado = MODELS_ASESOR_APARTAMENTOS.Where(x => x.STRCODIGOASESOR == codigoasesor.ToString()).ToList();
+
+                foreach (var datos in resultado)
+                {
+                    nombreasesor = datos.STRNOMBREASESOR;
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+
+            throw;
+        }
+
+
+    }
+
+    public async Task ValidarFecha(ChangeEventArgs? e)
+    {
+
+        if (!string.IsNullOrEmpty(e.Value.ToString()))
+        {
+            byte dia = (byte)Convert.ToDateTime(e.Value).DayOfWeek;
+
+            var yearcontrol = Convert.ToDateTime(e.Value).Year;
+            var monthcontrol = Convert.ToDateTime(e.Value).Month;
+            var daycontrol = Convert.ToDateTime(e.Value).Day;
+
+            var fechacontrol = yearcontrol + "/" + monthcontrol.ToString().PadLeft(2, '0') + "/" + daycontrol.ToString().PadLeft(2, '0');
+            fecha = fechacontrol;
+
+            var yearsystem = DateTime.Today.Year;
+            var monthsystem = DateTime.Today.Month;
+            var daysystem = DateTime.Today.Day;
+
+            var fechasistema = yearsystem + "/" + monthsystem.ToString().PadLeft(2, '0') + "/" + daysystem.ToString().PadLeft(2, '0');
+
+            if ((Convert.ToDateTime(fechacontrol) < Convert.ToDateTime(fechasistema)) || dia == 6 || dia == 0)
+            {
+                modalvalidar.Show();
+            }
+        }
+
+
+
+    }
+
+    private void NoAceptar()
+    {
+        modalvalidar.Hide();
+    }
+
+    private void CerrarConfirmacion()
+    {
+        modalconfirmacion.Hide();
+        NavigationManager.NavigateTo("/");
+    }
+
+
+
+}

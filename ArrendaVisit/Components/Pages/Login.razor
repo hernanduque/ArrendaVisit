@@ -1,0 +1,243 @@
+﻿@page "/Login"
+@rendermode InteractiveServer
+
+@layout LoginLayaout
+@* @layout MainLayoutInterno *@
+@inject HttpClient httpClient
+@* @inject AuthenticationStateProvider autentcacionProvider; *@
+@inject NavigationManager navManager;
+@inject IgrabarClienteServicio grabarClienteServicio
+@inject IlistaServicio ListaServicio
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@using Blazorise
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@* @using Microsoft.AspNetCore.Components.Authorization *@
+@using ArrendaVisit.Components.Layout
+@using ArrendaVisit.Extensiones;
+@using Entidades;
+@* @using Microsoft.AspNetCore.Authorization; *@
+@using System.Text;
+@using BlazorCaptcha;
+@using ArrendaVisit.Service
+@using Radzen
+@using Radzen.Blazor
+@using System.Security.Claims
+
+<div class="container mt-1">
+
+    @if (valided == false)
+    {
+        <div class="row justify-content-center">
+            <div class="col-lg-8 border p-1" style="background-color: #f8f9fa;">
+                <div class="text-center mb-4">
+                    <h3 style="color: #222936;">LOGIN</h3>
+                </div>
+                @* @if (mostrarSpinner)
+                {
+                    <div class="spinner">
+                        <Spinner Type="SpinnerType.Border" />
+                    </div>
+                } *@
+
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Correo</label>
+                    <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Ingrese su correo" @bind="login.Correo">
+                </div>
+                <div class="mb-3">
+                    <FieldLabel><font color="red">(*)</font>Contraseña</FieldLabel>
+                    <RadzenTextBox @bind-Value="@login.Clave" type="password" Style="width: 100%" Placeholder="Digite la contraseña" MaxLength="10" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <Captcha @bind-CaptchaWord="@Captcha" CharNumber="@CaptchaLetters" />
+                </div>
+
+                <div class="mb-3">
+                    <FieldLabel><font color="red">(*)</font>CAPTCHA</FieldLabel>
+                    <RadzenTextBox @bind-Value="@formModel.CaptchaVerif" id="idCaptcha" Style="width: 100%" Placeholder="Escribe las letras de arriba" MaxLength="10" class="form-control" required />
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-primary" style="background-color: #dc8f35;" @onclick="ValidarCaptcha">Iniciar Sesión</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<Modal @ref="modalalerta">
+    <ModalContent Size="ModalSize.Default" Centered="true">
+        <div style="background-color: #f8f9fa; border-radius: 10px;">
+            <ModalHeader style="background-color: #dc8f35; color: white;font-size:small">
+                <ModalTitle>
+                    Validación de Usuario y Clave
+                </ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+                <br>
+                Usuario o Clave no válidos.
+            </ModalBody>
+            <ModalFooter style="background-color: #f8f9fa;">
+                <Button Color="Color.Primary" Clicked="@CerrarModal" Style="background-color: #dc8f35;">Cerrar</Button>
+            </ModalFooter>
+        </div>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="modalalertacaptcha">
+    <ModalContent Size="ModalSize.Default" Centered="true">
+        <div style="background-color: #f8f9fa; border-radius: 10px;">
+            <ModalHeader style="background-color: #dc8f35; color: white;font-size:small">
+                <ModalTitle>
+                    Validación Captcha
+                </ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+                <br>
+                Los Datos del Captcha no son los mismos intenta de nuevo.
+            </ModalBody>
+            <ModalFooter style="background-color: #f8f9fa;">
+                <Button Color="Color.Primary" Clicked="@CerrarModal" Style="background-color: #dc8f35;">Cerrar</Button>
+            </ModalFooter>
+        </div>
+    </ModalContent>
+</Modal>
+
+@code {
+
+    private string Captcha = "";
+    private int CaptchaLetters = 5;
+    private bool valided = false;
+    private FormModel? formModel = new FormModel();
+    private Modal? modalalertacaptcha = null!;
+
+    private bool mostrarSpinner = false;
+
+    private Modal? modalalerta = null!;
+
+    // private LoginDTO login = new LoginDTO();
+
+    [CascadingParameter]
+    public HttpContext HttpContext { get; set; } = default;
+
+    [SupplyParameterFromForm]
+    public LoginDTO login { get; set; } = new LoginDTO();
+
+
+
+    protected override Task OnInitializedAsync()
+    {
+        Captcha = BlazorCaptcha.Tools.GetCaptchaWord(CaptchaLetters);
+
+        return base.OnInitializedAsync();
+    }
+
+    private async void ValidarCaptcha()
+    {
+        if (formModel.CaptchaVerif == Captcha)
+        {
+            valided = true;
+            formModel = new FormModel();
+            await IniciarSesion();
+        }
+        else
+        {
+            LimpiarCampos();
+            modalalertacaptcha.Show();
+        }
+
+    }
+
+
+    public class FormModel
+    {
+        public string Name { get; set; } = "";
+
+        public string CaptchaVerif { get; set; } = "";
+    }
+
+
+    private void CerrarModal()
+    {
+        modalalerta.Hide();
+        modalalertacaptcha.Hide();
+
+    }
+
+    private void LimpiarCampos()
+    {
+        OnInitializedAsync();
+        valided = false;
+        login.Correo = string.Empty;
+        formModel.CaptchaVerif = string.Empty;
+        login.Clave = string.Empty;
+    }
+
+    private async Task IniciarSesion()
+    {
+
+
+        // var loginResponse = await httpClient.PostAsJsonAsync<LoginDTO>("/api/Usuario/Login", login);
+
+        var loginResponse = await ListaServicio.GetUser(new Models_Parametros() { strcodigoasesor = login.Clave, stremail = login.Correo });
+
+        // if (loginResponse.IsSuccessStatusCode)
+        if (loginResponse != null && loginResponse.STRCODIGORESERVA != "0") // Comprobar si el retorno es válido
+        {
+            // var sesionUsuario = await loginResponse.Content.ReadFromJsonAsync<SesionDTO>();
+
+            try
+            {
+                // mostrarSpinner = true;
+
+                // var claims = new List<Claim>
+                // {
+                //      new Claim(type:ClaimTypes.Name, loginResponse.STRCODIGORESERVA),
+                //      new Claim(type:ClaimTypes.Email, login.Correo),
+                //  };
+
+                // var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                // var principal = new ClaimsPrincipal(identity);
+
+                // var httpContext = HttpContextAccessor.HttpContext;
+
+                // if (httpContext != null)
+                // {
+                //     await httpContext.SignInAsync(principal);
+                //     await Task.Delay(100);
+                //     // Redirige después de iniciar sesión
+                //      navManager.NavigateTo("HomeInterno", true);
+                // }
+                // mostrarSpinner = false;
+                // await httpContext.SignInAsync(principal);
+                // // await HttpContext.SignInAsync(principal);
+
+                // mostrarSpinner = false;
+                // //NavigationManager.NavigateTo("HomeInterno");
+                // navManager.NavigateTo("HomeInterno");
+
+                navManager.NavigateTo("HomeInterno", true);
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+            // navManager.NavigateTo("/Home");
+
+        }
+        else
+        {
+            valided = false;
+            LimpiarCampos();
+            mostrarSpinner = false;
+            modalalerta.Show();
+        }
+
+    }
+}

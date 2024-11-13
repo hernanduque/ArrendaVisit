@@ -1,0 +1,36 @@
+﻿ @inherits LayoutComponentBase
+
+
+<style>
+    footer {
+        text-align: center;
+        margin-top: 20px;
+        padding: 5px 0; /* Espacio interior del footer */
+        background-color: #222936; /* Fondo opcional */
+        color: white; /* Color del texto del footer */
+    }
+</style>
+
+<div class="page">
+    <main>
+
+        <br />
+        <div class="text-center">
+            <img width="400" height="400" src="AgenciaArriendo.png" class="img-responsive img-rounded img-thumbnail" alt="https://www.arrendavisit.com.co" style="border:none">
+        </div>
+        <br />
+        <div class="container-fluid" style="background-color: #222936;text-align: center;">
+            <h5 style="color: white;">Señor Usuario, bienvenido Gestion de Citas para visita de apartamentos ArrendaVisit</h5>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+        <footer>
+            @{
+                var año = @DateTime.Now.Year;
+            }
+            &copy; @año Todos los derechos reservados | ArrendaVisit
+        </footer>
+    </main>
+</div>

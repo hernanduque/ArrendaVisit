@@ -1,0 +1,70 @@
+﻿@page "/HomeInterno"
+@layout MainLayoutInterno
+@inject NavigationManager NavigationManager
+
+
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Microsoft.AspNetCore.Components.Web
+@using arrendaVisit.Components.Layout
+
+@* @attribute [Authorize] *@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Citas para visita de apartamentos ArrendaVisit</title>
+
+    <style>
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 5px 0; /* Espacio interior del footer */
+            /* background-color: #ee7402; /* Fondo opcional */ */
+            color: white; /* Color del texto del footer */
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+
+
+        <PageTitle>ArrendaVisit</PageTitle>
+
+        <br />
+        <div class="text-center">
+            <img width="400" height="400" src="AgenciaArriendo.png" class="img-responsive img-rounded img-thumbnail" alt="https://www.arrendavisit.com.co" style="border:none">
+        </div>
+
+
+        <div class="text-center">
+            <footer class="text-center py-3" style="color: black; margin-top: 17rem">
+                @{
+                    var año = @DateTime.Now.Year;
+                }
+                &copy; @año Todos los derechos reservados |  Agencia Arriendo Medellin y cercanias
+            </footer>
+        </div>
+
+        @* <br />
+        <div class="container-fluid" style="background-color: #ee7402;text-align: center;">
+            <h5 style="color: white;">Bienvenido al portal de Gestion y citas para Visitar Apartamentos</h5>
+        </div> *@
+
+        
+
+       @*  <footer>
+            @{
+                var año = @DateTime.Now.Year;
+            }
+        &copy; @año Todos los derechos reservados | Agencia Arriendo Medellin y cercanias
+        </footer> *@
+    </div>
+</body>
+</html>
+

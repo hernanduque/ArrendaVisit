@@ -1,0 +1,132 @@
+﻿@rendermode InteractiveServer
+
+@implements IDisposable
+
+@using Blazorise
+@using Radzen.Blazor
+@layout MainLayoutInterno
+@inject NavigationManager NavigationManager
+
+@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand">Atencion PQRS Emvarias</a>
+    </div>
+</div> *@
+
+
+
+@* <input type="checkbox" title="Navigation menu" class="navbar-toggler" /> *@
+
+@* <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="ConsultaCliente" Match="NavLinkMatch.All">
+                <img src="Consultar.png" alt="Consultar Cita" style="width: 20px; height: 20px; margin-right: 8px;" /> Reportes
+            </NavLink>
+        </div>
+
+      
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="AtencionCliente" Match="NavLinkMatch.All">
+                <img src="Cliente.png" alt="Atencion al Cliente" style="width: 20px; height: 20px; margin-right: 8px;" /> Atencion al Cliente
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Login" Match="NavLinkMatch.All">
+                <img src="Salir.png" alt="Home" style="width: 20px; height: 20px; margin-right: 8px;" /> Salir del sistema
+            </NavLink>
+        </div>
+
+    </nav>
+</div>
+
+ *@
+
+
+@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Gestion</a>
+    </div>
+</div> *@
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand">Agendamiento de visitas apartamentos ArrendaVisit</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+
+
+        <div class="nav-item px-3 dropdown">
+            <NavLink class="nav-link  cursor-pointer" @onclick="()=>expandSubNav=!expandSubNav" style="color: white;">
+                <img src="Consultar.png" alt="Reportes del sistema" style="width: 20px; height: 20px; margin-right: 8px;" /> Reportes
+            </NavLink>
+            @if (expandSubNav)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Excel" style="color: white;">
+                        @* <span class="bi bi-lock-nav-menu"></span>Servicios *@
+                        <img src="Atencion.png" alt="Reporte de Servicios" style="width: 20px; height: 20px; margin-right: 8px;" /> Servicios
+                    </NavLink>
+                </div>
+                @* <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="fetchdata">
+                        <span class="bi bi-lock-nav-menu"></span>Sub-menu 2
+                    </NavLink>
+                </div> *@
+
+            }
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="AtencionCliente" Match="NavLinkMatch.All" style="color: white;">
+                <img src="Cliente.png" alt="Atencion al Cliente" style="width: 20px; height: 20px; margin-right: 8px;" /> Atencion al Cliente
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Login" Match="NavLinkMatch.All" style="color: white;">
+                <img src="Salir.png" alt="Home" style="width: 20px; height: 20px; margin-right: 8px;" /> Salir del sistema
+            </NavLink>
+        </div>
+
+        
+    </nav>
+</div>
+
+@code {
+    private string? currentUrl;
+    private bool collapseNavMenu = true;
+    private bool expandSubNav = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+        expandSubNav = false;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

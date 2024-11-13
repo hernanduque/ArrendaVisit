@@ -1,0 +1,75 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Citas para Atención de PQR</title>
+
+    <style>
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 5px 0; /* Espacio interior del footer */
+            background-color: #222936; /* Fondo opcional */
+            color: white; /* Color del texto del footer */
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+
+
+        <PageTitle>Emvarias</PageTitle>
+
+        <br />
+        <div class="text-center">
+            <img width="400" height="400" src="AgenciaArriendo.png" class="img-responsive img-rounded img-thumbnail" alt="https://www.agenciaarriendo.com.co" style="border:none">
+        </div>
+        <br />
+        <div class="container-fluid" style="background-color: #222936;text-align: center;">
+            <h5 style="color: white;">Señor Usuario, bienvenido al portal de citas para visita de apartamentos presenciales</h5>
+        </div>
+
+        <br />
+
+        <p>
+            <font color="#222936" size="5">
+                Antes de programar su cita tenga en cuenta lo siguiente:
+            </font>
+        </p>
+
+        <p>
+            <font size="2" face="arial, sans-serif" color="black">1. Presentarse a la hora programada, y si es posible una lista de preguntas como:</font>
+            <br />
+            <font size="2" face="arial, sans-serif" color="black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Cercania de colegios.</font>
+            <br />
+            <font size="2" face="arial, sans-serif" color="black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Cercania de servicios de salud, transporte y recreacion.</font>
+            <br />
+            <font size="2" face="arial, sans-serif" color="black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• En caso de ir acompañado procure sea alguien acertivo y de confianza.</font>
+            <br />
+            <br />
+            <font size="2" face="arial, sans-serif" color="black">2. Al momento de llegar al apartamento por favor anunciarse con el portero indicando que tiene una cita programada.</font>
+            <br />
+            <font size="2" face="arial, sans-serif" color="black">3. Su cita no puede transferirse a otro cliente.</font>
+            <br />
+            <font size="2" face="arial, sans-serif" color="black">4. No presentarse o llegar tarde implicará pedir una nueva cita o un turno en la oficina.</font>
+        </p>
+
+        <footer>
+            @{
+                var año = @DateTime.Now.Year;
+            }
+            &copy; @año Todos los derechos reservados | Agencia Arriendo Medellin y cercanias
+        </footer>
+    </div>
+</body>
+</html>
